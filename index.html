@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +50,8 @@ main {
   right: 59%;
   font-size: 60%;
 }
-.pokemon__data2{
+
+.pokemon__data2 {
   position: absolute;
   font-size: 60%;
   top: 55%;
@@ -67,6 +68,20 @@ main {
   position: absolute;
   font-size: 58%;
   top: 59%;
+  right: 50%;
+}
+
+#pokemonHeightContainer {
+  position: absolute;
+  font-size: 50%;
+  top: 72%;
+  right: 50%;
+}
+
+#pokemonWeightContainer {
+  position: absolute;
+  font-size: 50%;
+  top: 77%;
   right: 50%;
 }
 
@@ -115,6 +130,7 @@ main {
   color: white;
   background-color: #444;
   text-align: center;
+  cursor: pointer;
 }
 
 .button:active {
@@ -147,8 +163,14 @@ main {
     <h1 class="pokemon__data2" id="pokemonNameContainer">
       <span class="pokemon__name" id="pokemonName2"></span>
     </h1>
-    <h1 class="pokemon__data2">
+    <h1 class="pokemon__data2" id="pokemonTypeContainer">
       <span class="pokemon__type" id="pokemonType"></span>
+    </h1>
+    <h1 class="pokemon__data2" id="pokemonHeightContainer">
+      <span class="pokemon__height" id="pokemonHeight"></span>
+    </h1>
+    <h1 class="pokemon__data2" id="pokemonWeightContainer">
+      <span class="pokemon__weight" id="pokemonWeight"></span>
     </h1>
     
   
@@ -168,144 +190,104 @@ main {
 
     <img src="./assets 2/d4bv6ry-ea1cbc18-a2d5-4d7c-b62c-002a49a35b0b-Photoroom.png" alt="pokedex" class="pokedex">
   </main>
-<script>
-    const pokemonName = document.querySelector('.pokemon__name');
-    const pokemonNumber = document.querySelector('.pokemon__number');
-    const pokemonImage = document.querySelector('.pokemon__image');
 
+<script>
     const pokemonName1 = document.querySelector('#pokemonName1');
     const pokemonNumber1 = document.querySelector('#pokemonNumber1');
     const pokemonName2 = document.querySelector('#pokemonName2');
     const pokemonNumber2 = document.querySelector('#pokemonNumber2');
+    const pokemonHeight = document.querySelector('#pokemonHeight');
+    const pokemonWeight = document.querySelector('#pokemonWeight');
+    const pokemonImage = document.querySelector('.pokemon__image');
+    const pokemonType = document.querySelector('.pokemon__type');
 
     const form = document.querySelector('.form');
     const input = document.querySelector('.input__search');
     const buttonPrev = document.querySelector('.btn-prev');
     const buttonNext = document.querySelector('.btn-next');
-    const pokemonType = document.querySelector('.pokemon__type');
 
     let searchPokemon = 1;
 
     const fetchPokemon = async (pokemon) => {
-    const APIResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+      try {
+        const APIResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
 
-    if (APIResponse.status === 200) {
-        const data = await APIResponse.json();
-        return data;
-    }
-    }
+        if (APIResponse.status === 200) {
+          const data = await APIResponse.json();
+          return data;
+        }
+        return null;
+      } catch (error) {
+        console.error('Erro ao buscar Pokémon:', error);
+        return null;
+      }
+    };
 
     const renderPokemon = async (pokemon) => {
-    pokemonName1.innerHTML = 'Loading...';
-    pokemonNumber1.innerHTML = '';
-    pokemonName2.innerHTML = 'Loading...';
-    pokemonNumber2.innerHTML = '';
+      pokemonName1.innerHTML = 'Loading...';
+      pokemonNumber1.innerHTML = '';
+      pokemonName2.innerHTML = 'Loading...';
+      pokemonNumber2.innerHTML = '';
+      pokemonHeight.innerHTML = '';
+      pokemonWeight.innerHTML = '';
 
-    const data = await fetchPokemon(pokemon);
+      const data = await fetchPokemon(pokemon);
 
-    if (data) {
+      if (data) {
         pokemonImage.style.display = 'block';
+        pokemonImage.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
+
         pokemonName1.innerHTML = data.name;
         pokemonNumber1.innerHTML = data.id;
         pokemonName2.innerHTML = data.name;
         pokemonNumber2.innerHTML = data.id;
-        pokemonImage.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
 
-        
-        pokemonType.innerHTML = data.types.map((type) => { 
-          if(type.type.name == "normal"){
-              return "<img src='icons/normal.svg'/>"
-          }
-          if(type.type.name == "bug"){
-              return "<img src='icons/bug.svg'/>"
-          }
-          if(type.type.name == "dark"){
-              return "<img src='icons/normal.svg'/>"
-          }
-          if(type.type.name == "dragon"){
-              return "<img src='icons/dragon.svg'/>"
-          }
-          if(type.type.name == "electric"){
-              return "<img src='icons/electric.svg'/>"
-          }
-          if(type.type.name == "fairy"){
-              return "<img src='icons/fairy.svg'/>"
-          }
-          if(type.type.name == "fighting"){
-              return "<img src='icons/fighting.svg'/>"
-          }
-          if(type.type.name == "flying"){
-              return "<img src='icons/flying.svg'/>"
-          }
-          if(type.type.name == "poison"){
-              return "<img src='icons/poison.svg'/>"
-          }
-          if(type.type.name == "ghost"){
-              return "<img src='icons/ghost.svg'/>"
-          }
-          if(type.type.name == "grass"){
-              return "<img src='icons/grass.svg'/>"
-          }
-          if(type.type.name == "ground"){
-              return "<img src='icons/ground.svg'/>"
-          }
-          if(type.type.name == "ice"){
-              return "<img src='icons/ice.svg'/>"
-          }
-          if(type.type.name == "psychic"){
-              return "<img src='icons/psychic.svg'/>"
-          }
-          if(type.type.name == "rock"){
-              return "<img src='icons/rock.svg'/>"
-          }
-          if(type.type.name == "steel"){
-              return "<img src='icons/steel.svg'/>"
-          }
-          if(type.type.name == "water"){
-              return "<img src='icons/water.svg'/>"
-          }
+        const heightInMeters = (data.height / 10).toFixed(2);
+        pokemonHeight.innerHTML = `Altura: ${heightInMeters} m`;
 
-          
+        const weightInKg = (data.weight / 10).toFixed(2);
+        pokemonWeight.innerHTML = `Peso: ${weightInKg} kg`;
 
-          console.log(type.type.name)
-          if(type.type.name == "fire"){
-              return "<img src='icons/fire.svg'/>"
-          }else{
-            "oiiiiiiiiiiiiiiiiiii"
-          }
-      }).join(', ');
-
+        pokemonType.innerHTML = data.types.map((type) => {
+          const typeName = type.type.name;
+          return `<img src='./icons/${typeName}.svg' alt='${typeName}' title='${typeName}' />`;
+        }).join(' ');
 
         input.value = '';
         searchPokemon = data.id;
-    } else {
+      } else {
         pokemonImage.style.display = 'none';
         pokemonName1.innerHTML = 'Not found :c';
         pokemonNumber1.innerHTML = '';
         pokemonName2.innerHTML = 'Not found :c';
         pokemonNumber2.innerHTML = '';
-    }
-    }
+        pokemonHeight.innerHTML = '';
+        pokemonWeight.innerHTML = '';
+      }
+    };
 
     form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    renderPokemon(input.value.toLowerCase());
+      event.preventDefault();
+      const searchValue = input.value.toLowerCase().trim();
+      if (searchValue) {
+        renderPokemon(searchValue);
+      }
     });
 
     buttonPrev.addEventListener('click', () => {
-    if (searchPokemon > 1) {
+      if (searchPokemon > 1) {
         searchPokemon -= 1;
         renderPokemon(searchPokemon);
-    }
+      }
     });
 
     buttonNext.addEventListener('click', () => {
-    searchPokemon += 1;
-    renderPokemon(searchPokemon);
+      searchPokemon += 1;
+      renderPokemon(searchPokemon);
     });
 
     renderPokemon(searchPokemon);
-    </script>
+</script>
 
 </body>
 </html>
